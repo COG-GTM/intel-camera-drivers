@@ -107,6 +107,25 @@ fn set_ctrl_rejects_too_large_value() {
     );
 }
 
+#[test]
+fn set_ctrl_rejects_values_above_u16_without_truncating() {
+    let mut dev = probe_default();
+    // 65536 % 65536 == 0 and 66000 % 65536 == 464 would both silently slip
+    // through a bare `as u16` cast; they must be rejected instead.
+    for v in [65536, 66000, i32::MAX] {
+        assert!(
+            matches!(
+                dev.set_ctrl(0x009a_090a, v),
+                Err(DW9714Error::PositionOutOfRange { .. })
+            ),
+            "value {v} must be rejected, not truncated"
+        );
+    }
+    // Nothing was programmed.
+    assert!(dev.bus().writes.is_empty());
+    assert_eq!(dev.current_val(), 0);
+}
+
 // --- I2C error + retry path ----------------------------------------------
 
 #[test]
@@ -239,6 +258,9 @@ fn runtime_resume_fails_when_sensor_power_fails() {
     let mut dev = Dw9714::probe(bus, full_config()).unwrap();
     assert_eq!(dev.runtime_resume(), Err(DW9714Error::Io));
     assert!(!dev.is_powered());
+    // Faithful to C `out:` cleanup: pm_runtime_get_sync increments the usage
+    // count even on failure, so the matching put must still run (no PM leak).
+    assert_eq!(dev.bus().power_put_count, 1);
 }
 
 #[test]

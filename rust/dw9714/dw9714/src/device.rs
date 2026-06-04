@@ -233,7 +233,15 @@ impl<B: Dw9714Bus> Dw9714<B> {
         if val < 0 {
             return Err(DW9714Error::InvalidArgument);
         }
-        let pos = LensPosition::new(val as u16)?;
+        // Reject (rather than truncate) anything that doesn't fit a u16; values
+        // in `(u16::MAX, i32::MAX]` would otherwise wrap via `as u16` and
+        // silently program the wrong position. `requested` is saturated to
+        // `u16::MAX` since the error field can't hold the full i32.
+        let raw = u16::try_from(val).map_err(|_| DW9714Error::PositionOutOfRange {
+            requested: u16::MAX,
+            max: LensPosition::MAX,
+        })?;
+        let pos = LensPosition::new(raw)?;
         self.set_position(pos)
     }
 
@@ -285,8 +293,11 @@ impl<B: Dw9714Bus> Dw9714<B> {
         self.ensure_initialized()?;
 
         if self.config.has_sensor_dev && self.bus.sensor_power_get().is_err() {
-            // C: pm_runtime_get_sync(sensor_dev) < 0 -> goto out (no put,
-            // since the get failed).
+            // C: pm_runtime_get_sync(sensor_dev) < 0 -> goto out, where `ret`
+            // is negative (truthy) and sensor_dev is set, so pm_runtime_put_sync
+            // *is* called. get_sync increments the usage count even on failure,
+            // so the matching put is required to avoid leaking a PM reference.
+            self.bus.sensor_power_put();
             return Err(DW9714Error::Io);
         }
         if self.config.gpio_xsd.is_some() && self.bus.set_gpio_xsd(true).is_err() {

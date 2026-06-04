@@ -147,6 +147,23 @@ fn set_ctrl_rejects_unknown_id() {
 }
 
 #[test]
+fn set_ctrl_via_ffi_rejects_truncating_values() {
+    let mut ctx = Ctx::default();
+    let h = create(&mut ctx, -1, 0);
+    // 66000 would wrap to 464 via a bare `as u16`; must be rejected.
+    assert_eq!(
+        unsafe { dw9714_rust_set_ctrl(h, FOCUS_ABSOLUTE, 66000) },
+        EINVAL
+    );
+    assert_eq!(
+        unsafe { dw9714_rust_set_ctrl(h, FOCUS_ABSOLUTE, 65536) },
+        EINVAL
+    );
+    unsafe { dw9714_rust_destroy(h) };
+    assert!(ctx.writes.is_empty());
+}
+
+#[test]
 fn null_handle_is_handled_gracefully() {
     assert_eq!(
         unsafe { dw9714_rust_set_position(core::ptr::null_mut(), 1) },
