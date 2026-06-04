@@ -1,0 +1,16 @@
+[workspace]
+resolver = "2"
+members = [
+    "ipu4-fw-com-sys",
+    "ipu4-fw-com",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "GPL-2.0"
+repository = "https://github.com/COG-GTM/intel-camera-drivers"
+description = "Rust port of the Intel IPU4 firmware communication (syscom) layer"
+
+[profile.bench]
+debug = true

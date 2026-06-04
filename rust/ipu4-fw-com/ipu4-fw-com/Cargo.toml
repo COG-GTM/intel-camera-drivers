@@ -1,0 +1,27 @@
+[package]
+name = "ipu4-fw-com"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Safe, idiomatic Rust implementation of the Intel IPU4 firmware communication (syscom) protocol"
+
+[lib]
+name = "ipu4_fw_com"
+# `cdylib`/`staticlib` let the optional `c-abi` exports be linked into C.
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[features]
+default = []
+# Exposes the original C ABI via `#[no_mangle] extern "C"` symbols.
+c-abi = []
+
+[dependencies]
+ipu4-fw-com-sys = { path = "../ipu4-fw-com-sys" }
+
+[dev-dependencies]
+criterion = { version = "0.5", default-features = false, features = ["cargo_bench_support"] }
+
+[[bench]]
+name = "fw_com_bench"
+harness = false
