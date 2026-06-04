@@ -1,0 +1,12 @@
+[package]
+name = "ipu4-fw-msgs-sys"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Raw FFI bindings mirroring the IPU4 ISYS firmware message ABI (intel-ipu4-isys-fw-msgs)"
+
+[lib]
+name = "ipu4_fw_msgs_sys"
+
+[dependencies]

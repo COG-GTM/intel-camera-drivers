@@ -1,0 +1,3 @@
+/target
+# golden-file generator build artifact (the .bin outputs ARE committed)
+ipu4-fw-msgs/tests/golden/gen/gen_golden

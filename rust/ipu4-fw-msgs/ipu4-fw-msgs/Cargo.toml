@@ -1,0 +1,27 @@
+[package]
+name = "ipu4-fw-msgs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Idiomatic, memory-safe Rust implementation of IPU4 ISYS firmware message marshaling"
+
+[lib]
+name = "ipu4_fw_msgs"
+
+[features]
+# Export the safe implementation back through the original C ABI via
+# `#[no_mangle] extern "C"` symbols. Off by default so the crate builds as a
+# pure-Rust library; enable with `--features c-abi`.
+c-abi = ["ipu4-fw-msgs-sys"]
+
+[dependencies]
+ipu4-fw-msgs-sys = { path = "../ipu4-fw-msgs-sys", optional = true }
+
+[dev-dependencies]
+ipu4-fw-msgs-sys = { path = "../ipu4-fw-msgs-sys" }
+criterion = { version = "0.5", default-features = false }
+
+[[bench]]
+name = "marshaling"
+harness = false
