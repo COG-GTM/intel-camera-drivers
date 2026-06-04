@@ -1,0 +1,19 @@
+[package]
+name = "dw9714-sys"
+description = "Raw, manually-written unsafe FFI bindings for the dw9714 VCM lens-actuator driver C interface"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[lints.rust]
+# Faithful C bindings intentionally use non-Rust naming (e.g. `dw9714_platform_data`
+# types and the `VCM_VAL` macro-as-fn) so the mapping to the original C stays obvious.
+non_camel_case_types = "allow"
+non_snake_case = "allow"
+
+[lib]
+# This crate only declares the foreign interface; it links nothing by itself.
+# The actual symbols are provided by the kernel module / the c-abi feature of
+# the `dw9714` crate at integration time.

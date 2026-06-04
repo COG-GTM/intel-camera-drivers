@@ -1,0 +1,18 @@
+[workspace]
+resolver = "2"
+members = [
+    "dw9714-sys",
+    "dw9714",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "GPL-2.0"
+repository = "https://github.com/COG-GTM/intel-camera-drivers"
+authors = ["Camera C->Rust migration"]
+
+# Keep benchmark and test builds optimized enough to be representative while
+# staying quick to compile in CI.
+[profile.bench]
+debug = true
