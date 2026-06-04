@@ -1,0 +1,28 @@
+[package]
+name = "ipu4-cpd"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Idiomatic, memory-safe Rust parser for the Intel IPU4 CPD firmware-package format"
+
+[lib]
+name = "ipu4_cpd"
+# `cdylib`/`staticlib` let the optional `c-abi` exports be linked from C.
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[features]
+default = []
+# Re-export the parser through the original C ABI via `#[no_mangle]` symbols.
+c-abi = []
+
+[dependencies]
+ipu4-cpd-sys = { path = "../ipu4-cpd-sys" }
+
+[dev-dependencies]
+ipu4-cpd-sys = { path = "../ipu4-cpd-sys" }
+criterion = { version = "0.5", default-features = false, features = ["cargo_bench_support"] }
+
+[[bench]]
+name = "parse"
+harness = false

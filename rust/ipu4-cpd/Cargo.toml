@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = ["ipu4-cpd-sys", "ipu4-cpd"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "GPL-2.0"
+repository = "https://github.com/COG-GTM/intel-camera-drivers"
+description = "Safe Rust port of the Intel IPU4 CPD (Compact Package Directory) firmware-package parser"
+
+[profile.bench]
+debug = true
