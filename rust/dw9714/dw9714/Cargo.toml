@@ -1,0 +1,32 @@
+[package]
+name = "dw9714"
+description = "Safe, idiomatic Rust driver for the dw9714 VCM (voice-coil motor) lens actuator, ported from the Intel camera C driver"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+dw9714-sys = { path = "../dw9714-sys" }
+
+[dev-dependencies]
+criterion = { version = "0.5", default-features = false }
+
+[features]
+default = []
+# Re-export the ported Rust logic through the original C ABI via
+# `#[no_mangle] extern "C"` symbols, so the kernel module can call into Rust
+# incrementally without changing existing C callers.
+c-abi = []
+
+[[bench]]
+name = "lens_set"
+harness = false
+
+[lib]
+# A `staticlib`/`cdylib` would be added when actually linking into the kernel
+# module; for the workspace we keep a plain rlib so tests and benches build
+# without extra toolchain setup. The `c-abi` exports are still compiled and
+# checked.
+crate-type = ["lib"]
