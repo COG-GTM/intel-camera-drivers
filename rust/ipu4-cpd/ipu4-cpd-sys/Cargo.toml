@@ -1,0 +1,12 @@
+[package]
+name = "ipu4-cpd-sys"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Raw unsafe FFI bindings mirroring the Intel IPU4 CPD C structs and function signatures"
+
+[lib]
+name = "ipu4_cpd_sys"
+
+[dependencies]
