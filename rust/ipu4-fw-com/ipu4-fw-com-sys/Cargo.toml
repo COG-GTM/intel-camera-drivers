@@ -1,0 +1,12 @@
+[package]
+name = "ipu4-fw-com-sys"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Raw FFI bindings mirroring the Intel IPU4 firmware communication C ABI"
+
+[lib]
+name = "ipu4_fw_com_sys"
+
+[dependencies]
