@@ -1,0 +1,16 @@
+[workspace]
+resolver = "2"
+members = [
+    "ipu4-fw-msgs-sys",
+    "ipu4-fw-msgs",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "GPL-2.0"
+repository = "https://github.com/COG-GTM/intel-camera-drivers"
+description = "Safe Rust port of the IPU4 ISYS firmware message marshaling module"
+
+[profile.bench]
+debug = true
